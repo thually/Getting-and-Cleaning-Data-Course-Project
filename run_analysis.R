@@ -1,3 +1,5 @@
+library(dplyr); library(tidyr)
+
 #1st part
 features <- read.table("UCI HAR Dataset/features.txt")
 features[,1] <- NULL
@@ -34,3 +36,8 @@ currColNames <- sub("\\)", "", currColNames)
 currColNames <- gsub("-", ".", currColNames)
 
 colnames(meanstddata) <- currColNames
+
+#5th part
+meandata <- meanstddata %>% group_by(subject_id, activity) %>% summarise_all(list(TOTALMEAN= mean))
+
+write.table(meandata, "meandata.txt", row.names = FALSE)
