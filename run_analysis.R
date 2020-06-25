@@ -1,4 +1,4 @@
-#1 part
+#1st part
 features <- read.table("UCI HAR Dataset/features.txt")
 features[,1] <- NULL
 
@@ -16,6 +16,21 @@ traindata <- cbind(subject_train,Y_train,X_train)
 
 fulldata <- rbind(testdata, traindata)
 
-#2 part
+#2nd part
 columnnames <- c("subject_id","activity", features[,1])
 colnames(fulldata) <- columnnames
+
+meanstddata <- select(fulldata, subject_id, activity, contains("mean()") | contains("std()"))
+
+#3th part
+meanstddata$activity <- factor(meanstddata$activity, labels = c("walking", "walking_upstais", "walking_downstairs", "sitting", "standing", "laying"))
+
+#4th part
+currColNames <- colnames(meanstddata)
+currColNames <- sub("^t","time",currColNames)
+currColNames <- sub("^f", "frequency", currColNames)
+currColNames <- sub("\\(", "", currColNames)
+currColNames <- sub("\\)", "", currColNames)
+currColNames <- gsub("-", ".", currColNames)
+
+colnames(meanstddata) <- currColNames
